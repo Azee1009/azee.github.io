@@ -6,7 +6,10 @@
 <title>Azee Consulting</title>
 <style>
 body { margin:0; font-family:Arial; background:#0f172a; color:#fff; }
-.container { max-width:600px; margin:auto; padding:20px; text-align:center; }
+header { text-align:center; padding:40px 20px; }
+nav a { margin:0 15px; color:#22c55e; cursor:pointer; }
+.section { display:none; padding:20px; max-width:800px; margin:auto; }
+.active { display:block; }
 .card { background:#1e293b; padding:30px; border-radius:12px; margin-top:20px; }
 button { padding:12px 20px; border:none; border-radius:8px; cursor:pointer; margin-top:20px; font-size:16px; }
 .btn-primary { background:#22c55e; color:#000; }
@@ -14,23 +17,51 @@ input, select { width:100%; padding:10px; margin-top:15px; border-radius:6px; bo
 </style>
 </head>
 <body>
-<div class="container">
 
-<!-- HOME PAGE -->
-<div class="card" id="home">
+<header>
 <h1>⚡ Azee Consulting</h1>
 <p>Transmission Planning | DPR | Techno-Commercial Advisory</p>
-<button class="btn-primary" onclick="showSection('riskIntro')">Check Project Risk</button>
+<nav>
+<a onclick="showPage('home')">Home</a>
+<a onclick="showPage('projects')">Projects</a>
+<a onclick="showPage('contact')">Contact</a>
+<a onclick="showPage('risk')">Check Risk</a>
+</nav>
+</header>
+
+<!-- HOME -->
+<div id="home" class="section active">
+<div class="card">
+<h2>About Me</h2>
+<p>I specialize in transmission planning, DPR preparation, and techno-commercial analysis for utilities.</p>
+</div>
 </div>
 
-<!-- INTRO -->
-<div class="card" id="riskIntro" style="display:none;">
+<!-- PROJECTS -->
+<div id="projects" class="section">
+<div class="card">
+<h2>Projects</h2>
+<p>• Transmission planning studies<br>• DPR & TBCB reports<br>• Techno-commercial evaluations</p>
+</div>
+</div>
+
+<!-- CONTACT -->
+<div id="contact" class="section">
+<div class="card">
+<h2>Contact</h2>
+<p>Email: your.email@example.com</p>
+</div>
+</div>
+
+<!-- RISK TOOL -->
+<div id="risk" class="section">
+
+<div class="card" id="riskIntro">
 <h2>Transmission Project Risk Checker</h2>
 <p>Answer 5 quick questions to assess your project risk.</p>
 <button class="btn-primary" onclick="startRisk()">Start</button>
 </div>
 
-<!-- STEPS -->
 <div class="card" id="step1" style="display:none;">
 <h3>Voltage Level?</h3>
 <select id="voltage">
@@ -70,63 +101,52 @@ input, select { width:100%; padding:10px; margin-top:15px; border-radius:6px; bo
 <button class="btn-primary" onclick="nextStep(4)">See Result</button>
 </div>
 
-<!-- RESULT -->
 <div class="card" id="result" style="display:none;">
 <h2>Your Risk Score</h2>
 <p id="score"></p>
 <input type="email" placeholder="Enter your email for detailed report">
 <button class="btn-primary">Get Full Analysis</button>
-<br><br>
-<button onclick="goHome()">Back to Home</button>
 </div>
 
 </div>
 
 <script>
-function showSection(id){
-  document.getElementById("home").style.display="none";
-  document.getElementById(id).style.display="block";
+function showPage(page){
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.getElementById(page).classList.add('active');
 }
 
 function startRisk(){
-  document.getElementById("riskIntro").style.display="none";
-  document.getElementById("step1").style.display="block";
+  document.getElementById('riskIntro').style.display='none';
+  document.getElementById('step1').style.display='block';
 }
 
 function nextStep(step){
-  document.getElementById("step"+step).style.display="none";
+  document.getElementById('step'+step).style.display='none';
 
   if(step===4){
     calculate();
     return;
   }
 
-  document.getElementById("step"+(step+1)).style.display="block";
+  document.getElementById('step'+(step+1)).style.display='block';
 }
 
 function calculate(){
   let score = 0;
-  score += parseInt(document.getElementById("voltage").value);
-  score += parseInt(document.getElementById("type").value);
-  score += parseInt(document.getElementById("time").value);
-  score += parseInt(document.getElementById("land").value);
+  score += parseInt(document.getElementById('voltage').value);
+  score += parseInt(document.getElementById('type').value);
+  score += parseInt(document.getElementById('time').value);
+  score += parseInt(document.getElementById('land').value);
 
-  document.getElementById("result").style.display="block";
+  document.getElementById('result').style.display='block';
 
   let msg;
-  if(score >= 8){
-    msg = "⚠️ High Risk Project";
-  } else if(score >=5){
-    msg = "⚡ Medium Risk Project";
-  } else {
-    msg = "✅ Low Risk Project";
-  }
+  if(score >= 8){ msg = '⚠️ High Risk Project'; }
+  else if(score >=5){ msg = '⚡ Medium Risk Project'; }
+  else { msg = '✅ Low Risk Project'; }
 
-  document.getElementById("score").innerText = msg;
-}
-
-function goHome(){
-  location.reload();
+  document.getElementById('score').innerText = msg;
 }
 </script>
 
