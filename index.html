@@ -1,112 +1,132 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Transmission Project Risk Checker</title>
-  <style>
-    body { font-family: Arial, sans-serif; margin:0; background:#0f172a; color:#fff; display:flex; justify-content:center; align-items:center; min-height:100vh; }
-    .container { width:90%; max-width:500px; text-align:center; }
-    button { padding:12px 20px; border:none; border-radius:8px; cursor:pointer; margin-top:20px; font-size:16px; }
-    .btn-primary { background:#22c55e; color:#000; }
-    .card { background:#1e293b; padding:30px; border-radius:12px; }
-    input, select { width:100%; padding:10px; margin-top:15px; border-radius:6px; border:none; font-size:16px; }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Azee Consulting</title>
+<style>
+body { margin:0; font-family:Arial; background:#0f172a; color:#fff; }
+.container { max-width:600px; margin:auto; padding:20px; text-align:center; }
+.card { background:#1e293b; padding:30px; border-radius:12px; margin-top:20px; }
+button { padding:12px 20px; border:none; border-radius:8px; cursor:pointer; margin-top:20px; font-size:16px; }
+.btn-primary { background:#22c55e; color:#000; }
+input, select { width:100%; padding:10px; margin-top:15px; border-radius:6px; border:none; }
+</style>
 </head>
 <body>
 <div class="container">
 
-  <!-- Step 1 -->
-  <div class="card" id="step1">
-    <h2>⚡ Transmission Project Risk Checker</h2>
-    <p>Answer 5 quick questions to assess your project risk.</p>
-    <button class="btn-primary" onclick="nextStep(1)">Start</button>
-  </div>
+<!-- HOME PAGE -->
+<div class="card" id="home">
+<h1>⚡ Azee Consulting</h1>
+<p>Transmission Planning | DPR | Techno-Commercial Advisory</p>
+<button class="btn-primary" onclick="showSection('riskIntro')">Check Project Risk</button>
+</div>
 
-  <!-- Step 2 -->
-  <div class="card" id="step2" style="display:none;">
-    <h3>Voltage Level?</h3>
-    <select id="voltage">
-      <option value="1">Below 132 kV</option>
-      <option value="2">220 kV</option>
-      <option value="3">400 kV+</option>
-    </select>
-    <button class="btn-primary" onclick="nextStep(2)">Next</button>
-  </div>
+<!-- INTRO -->
+<div class="card" id="riskIntro" style="display:none;">
+<h2>Transmission Project Risk Checker</h2>
+<p>Answer 5 quick questions to assess your project risk.</p>
+<button class="btn-primary" onclick="startRisk()">Start</button>
+</div>
 
-  <!-- Step 3 -->
-  <div class="card" id="step3" style="display:none;">
-    <h3>Project Type?</h3>
-    <select id="type">
-      <option value="1">Brownfield</option>
-      <option value="2">Greenfield</option>
-    </select>
-    <button class="btn-primary" onclick="nextStep(3)">Next</button>
-  </div>
+<!-- STEPS -->
+<div class="card" id="step1" style="display:none;">
+<h3>Voltage Level?</h3>
+<select id="voltage">
+<option value="1">Below 132 kV</option>
+<option value="2">220 kV</option>
+<option value="3">400 kV+</option>
+</select>
+<button class="btn-primary" onclick="nextStep(1)">Next</button>
+</div>
 
-  <!-- Step 4 -->
-  <div class="card" id="step4" style="display:none;">
-    <h3>Timeline?</h3>
-    <select id="time">
-      <option value="3">Less than 1 year</option>
-      <option value="2">1-2 years</option>
-      <option value="1">2+ years</option>
-    </select>
-    <button class="btn-primary" onclick="nextStep(4)">Next</button>
-  </div>
+<div class="card" id="step2" style="display:none;">
+<h3>Project Type?</h3>
+<select id="type">
+<option value="1">Brownfield</option>
+<option value="2">Greenfield</option>
+</select>
+<button class="btn-primary" onclick="nextStep(2)">Next</button>
+</div>
 
-  <!-- Step 5 -->
-  <div class="card" id="step5" style="display:none;">
-    <h3>Land Acquisition Status?</h3>
-    <select id="land">
-      <option value="3">Not started</option>
-      <option value="2">In progress</option>
-      <option value="1">Completed</option>
-    </select>
-    <button class="btn-primary" onclick="nextStep(5)">See Result</button>
-  </div>
+<div class="card" id="step3" style="display:none;">
+<h3>Timeline?</h3>
+<select id="time">
+<option value="3">Less than 1 year</option>
+<option value="2">1-2 years</option>
+<option value="1">2+ years</option>
+</select>
+<button class="btn-primary" onclick="nextStep(3)">Next</button>
+</div>
 
-  <!-- Result -->
-  <div class="card" id="result" style="display:none;">
-    <h2>Your Risk Score</h2>
-    <p id="score"></p>
-    <p>Want a detailed DPR / TBCB strategy? Contact me.</p>
-  </div>
+<div class="card" id="step4" style="display:none;">
+<h3>Land Acquisition Status?</h3>
+<select id="land">
+<option value="3">Not started</option>
+<option value="2">In progress</option>
+<option value="1">Completed</option>
+</select>
+<button class="btn-primary" onclick="nextStep(4)">See Result</button>
+</div>
+
+<!-- RESULT -->
+<div class="card" id="result" style="display:none;">
+<h2>Your Risk Score</h2>
+<p id="score"></p>
+<input type="email" placeholder="Enter your email for detailed report">
+<button class="btn-primary">Get Full Analysis</button>
+<br><br>
+<button onclick="goHome()">Back to Home</button>
+</div>
 
 </div>
 
 <script>
-function nextStep(step){
-  var current = document.getElementById("step"+step);
-  if(current){ current.style.display = "none"; }
+function showSection(id){
+  document.getElementById("home").style.display="none";
+  document.getElementById(id).style.display="block";
+}
 
-  if(step === 5){
+function startRisk(){
+  document.getElementById("riskIntro").style.display="none";
+  document.getElementById("step1").style.display="block";
+}
+
+function nextStep(step){
+  document.getElementById("step"+step).style.display="none";
+
+  if(step===4){
     calculate();
     return;
   }
 
-  var next = document.getElementById("step"+(step+1));
-  if(next){ next.style.display = "block"; }
+  document.getElementById("step"+(step+1)).style.display="block";
 }
 
 function calculate(){
-  var score = 0;
+  let score = 0;
   score += parseInt(document.getElementById("voltage").value);
   score += parseInt(document.getElementById("type").value);
   score += parseInt(document.getElementById("time").value);
   score += parseInt(document.getElementById("land").value);
 
-  document.getElementById("result").style.display = "block";
+  document.getElementById("result").style.display="block";
 
-  var msg;
+  let msg;
   if(score >= 8){
     msg = "⚠️ High Risk Project";
-  } else if(score >= 5){
+  } else if(score >=5){
     msg = "⚡ Medium Risk Project";
   } else {
     msg = "✅ Low Risk Project";
   }
+
   document.getElementById("score").innerText = msg;
+}
+
+function goHome(){
+  location.reload();
 }
 </script>
 
