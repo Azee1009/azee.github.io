@@ -5,12 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Transmission Project Risk Checker</title>
   <style>
-    body { font-family: Arial, sans-serif; margin:0; background:#0f172a; color:#fff; display:flex; justify-content:center; align-items:center; height:100vh; }
+    body { font-family: Arial, sans-serif; margin:0; background:#0f172a; color:#fff; display:flex; justify-content:center; align-items:center; min-height:100vh; }
     .container { width:90%; max-width:500px; text-align:center; }
-    button { padding:12px 20px; border:none; border-radius:8px; cursor:pointer; margin-top:20px; }
+    button { padding:12px 20px; border:none; border-radius:8px; cursor:pointer; margin-top:20px; font-size:16px; }
     .btn-primary { background:#22c55e; color:#000; }
     .card { background:#1e293b; padding:30px; border-radius:12px; }
-    input, select { width:100%; padding:10px; margin-top:15px; border-radius:6px; border:none; }
+    input, select { width:100%; padding:10px; margin-top:15px; border-radius:6px; border:none; font-size:16px; }
   </style>
 </head>
 <body>
@@ -70,37 +70,43 @@
   <div class="card" id="result" style="display:none;">
     <h2>Your Risk Score</h2>
     <p id="score"></p>
-    <p>Want a detailed DPR / planning strategy? Contact me.</p>
+    <p>Want a detailed DPR / TBCB strategy? Contact me.</p>
   </div>
 
 </div>
 
 <script>
 function nextStep(step){
-  document.getElementById("step"+step).style.display="none";
-  document.getElementById("step"+(step+1))?.style.display="block";
+  var current = document.getElementById("step"+step);
+  if(current){ current.style.display = "none"; }
 
-  if(step===5){
+  if(step === 5){
     calculate();
+    return;
   }
+
+  var next = document.getElementById("step"+(step+1));
+  if(next){ next.style.display = "block"; }
 }
 
 function calculate(){
-  let score = 0;
+  var score = 0;
   score += parseInt(document.getElementById("voltage").value);
   score += parseInt(document.getElementById("type").value);
   score += parseInt(document.getElementById("time").value);
   score += parseInt(document.getElementById("land").value);
 
-  document.getElementById("result").style.display="block";
+  document.getElementById("result").style.display = "block";
 
+  var msg;
   if(score >= 8){
-    document.getElementById("score").innerText = "⚠️ High Risk Project";
-  } else if(score >=5){
-    document.getElementById("score").innerText = "⚡ Medium Risk Project";
+    msg = "⚠️ High Risk Project";
+  } else if(score >= 5){
+    msg = "⚡ Medium Risk Project";
   } else {
-    document.getElementById("score").innerText = "✅ Low Risk Project";
+    msg = "✅ Low Risk Project";
   }
+  document.getElementById("score").innerText = msg;
 }
 </script>
 
