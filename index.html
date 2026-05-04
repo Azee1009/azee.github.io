@@ -3,87 +3,106 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>My Portfolio</title>
+  <title>Transmission Project Risk Checker</title>
   <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      line-height: 1.6;
-    }
-    header {
-      background: #333;
-      color: #fff;
-      padding: 1rem 0;
-      text-align: center;
-    }
-    nav a {
-      color: #fff;
-      margin: 0 15px;
-      text-decoration: none;
-    }
-    section {
-      padding: 40px;
-      max-width: 900px;
-      margin: auto;
-    }
-    .projects {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 20px;
-    }
-    .card {
-      border: 1px solid #ddd;
-      padding: 20px;
-      border-radius: 10px;
-    }
-    footer {
-      text-align: center;
-      padding: 20px;
-      background: #f4f4f4;
-    }
+    body { font-family: Arial, sans-serif; margin:0; background:#0f172a; color:#fff; display:flex; justify-content:center; align-items:center; height:100vh; }
+    .container { width:90%; max-width:500px; text-align:center; }
+    button { padding:12px 20px; border:none; border-radius:8px; cursor:pointer; margin-top:20px; }
+    .btn-primary { background:#22c55e; color:#000; }
+    .card { background:#1e293b; padding:30px; border-radius:12px; }
+    input, select { width:100%; padding:10px; margin-top:15px; border-radius:6px; border:none; }
   </style>
 </head>
 <body>
+<div class="container">
 
-<header>
-  <h1>Azee</h1>
-  <p>Consultant | Engineer | Problem Solver</p>
-  <nav>
-    <a href="#about">About</a>
-    <a href="#projects">Projects</a>
-    <a href="#contact">Contact</a>
-  </nav>
-</header>
-
-<section id="about">
-  <h2>About Me</h2>
-  <p>
-    I am a consultant.
-  </p>
-</section>
-
-<section id="projects">
-  <h2>Projects</h2>
-  <div class="projects">
-    <div class="card">
-      <h3>Project 1</h3>
-      <p>Short description of your project.</p>
-    </div>
-    <div class="card">
-      <h3>Project 2</h3>
-      <p>Short description of your project.</p>
-    </div>
+  <!-- Step 1 -->
+  <div class="card" id="step1">
+    <h2>⚡ Transmission Project Risk Checker</h2>
+    <p>Answer 5 quick questions to assess your project risk.</p>
+    <button class="btn-primary" onclick="nextStep(1)">Start</button>
   </div>
-</section>
 
-<section id="contact">
-  <h2>Contact</h2>
-  <p>Email:iam.azee@gmail.com</p>
-</section>
+  <!-- Step 2 -->
+  <div class="card" id="step2" style="display:none;">
+    <h3>Voltage Level?</h3>
+    <select id="voltage">
+      <option value="1">Below 132 kV</option>
+      <option value="2">220 kV</option>
+      <option value="3">400 kV+</option>
+    </select>
+    <button class="btn-primary" onclick="nextStep(2)">Next</button>
+  </div>
 
-<footer>
-  <p>© 2026 Azee</p>
-</footer>
+  <!-- Step 3 -->
+  <div class="card" id="step3" style="display:none;">
+    <h3>Project Type?</h3>
+    <select id="type">
+      <option value="1">Brownfield</option>
+      <option value="2">Greenfield</option>
+    </select>
+    <button class="btn-primary" onclick="nextStep(3)">Next</button>
+  </div>
+
+  <!-- Step 4 -->
+  <div class="card" id="step4" style="display:none;">
+    <h3>Timeline?</h3>
+    <select id="time">
+      <option value="3">Less than 1 year</option>
+      <option value="2">1-2 years</option>
+      <option value="1">2+ years</option>
+    </select>
+    <button class="btn-primary" onclick="nextStep(4)">Next</button>
+  </div>
+
+  <!-- Step 5 -->
+  <div class="card" id="step5" style="display:none;">
+    <h3>Land Acquisition Status?</h3>
+    <select id="land">
+      <option value="3">Not started</option>
+      <option value="2">In progress</option>
+      <option value="1">Completed</option>
+    </select>
+    <button class="btn-primary" onclick="nextStep(5)">See Result</button>
+  </div>
+
+  <!-- Result -->
+  <div class="card" id="result" style="display:none;">
+    <h2>Your Risk Score</h2>
+    <p id="score"></p>
+    <p>Want a detailed DPR / TBCB strategy? Contact me.</p>
+  </div>
+
+</div>
+
+<script>
+function nextStep(step){
+  document.getElementById("step"+step).style.display="none";
+  document.getElementById("step"+(step+1))?.style.display="block";
+
+  if(step===5){
+    calculate();
+  }
+}
+
+function calculate(){
+  let score = 0;
+  score += parseInt(document.getElementById("voltage").value);
+  score += parseInt(document.getElementById("type").value);
+  score += parseInt(document.getElementById("time").value);
+  score += parseInt(document.getElementById("land").value);
+
+  document.getElementById("result").style.display="block";
+
+  if(score >= 8){
+    document.getElementById("score").innerText = "⚠️ High Risk Project";
+  } else if(score >=5){
+    document.getElementById("score").innerText = "⚡ Medium Risk Project";
+  } else {
+    document.getElementById("score").innerText = "✅ Low Risk Project";
+  }
+}
+</script>
 
 </body>
 </html>
